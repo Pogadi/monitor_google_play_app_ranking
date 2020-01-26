@@ -1,8 +1,12 @@
-from bs4 import BeautifulSoup
+import time
 import csv
-import requests
-from _datetime import datetime
+from bs4 import BeautifulSoup
+from datetime import datetime
+from selenium import webdriver
 
+
+
+  # Optional argument, if not specified will search path.
 
 def is_ranking(class_post):
     app_id = "com.taransit.transport"
@@ -22,7 +26,7 @@ def ranking_index(posts):
             rank = i
             break
         else:
-            rank = ">50"
+            rank = "UR"
 
     return rank
 
@@ -53,9 +57,8 @@ def get_keywords():
     return keywords
 
 
-def get_data_from_gp(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+def get_data_from_gp(source):
+    soup = BeautifulSoup(source, 'html.parser')
     posts = soup.find_all(class_='poRVub')
 
     return posts
@@ -73,7 +76,36 @@ def keywords_to_url():
     return keywords
 
 
+def scroll_down_page(driver):
+
+    timesleep = 1.5
+
+    # Get scroll height
+    last_height = driver.execute_script("return document.body.scrollHeight")
+
+    while True:
+        # Scroll down to bottom
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
+        time.sleep(timesleep)
+
+        # Calculate new scroll height and compare with last scroll height
+        new_height = driver.execute_script("return document.body.scrollHeight")
+        if new_height == last_height:
+            break
+        last_height = new_height
+
+    #neccessary to sleep program because driver is loading data, in case of slow interner connection, don't load everything
+    time.sleep(timesleep)
+
+    source = driver.page_source
+
+    return source
+
+
 def main():
+    driver = webdriver.Chrome('/Users/martin/Documents/STUDY/5_DEV/1_Python_Scrapig/chromedriver')
+
     filename = datetime.now().strftime("%Y%m%d-%H%M%S")
     with  open(filename + '.csv', 'w') as output:
 
@@ -82,16 +114,21 @@ def main():
         print("\nToday ranking status is: \n")
 
         for keyword in keywords_url:
-            word = keyword
+
+            word = keyword.replace('%20', ' ')
             url = create_url(1, keyword)
-            posts = get_data_from_gp(url)
+
+            driver.get(url)
+            posts = get_data_from_gp(scroll_down_page(driver))
             rank = ranking_index(posts)
 
-            line = ("{}, {}\n".format(word, rank))
+            number = len(posts)
+
+            line = ("{}, {}, {}\n".format(rank, number, word))
             output.write(line)
 
-            print("{} ranked at: {}".format(word, rank))
+            print("{} / {}  ~ {} ".format(rank, number, word))
 
-    print("\nYour rank monitoring was successful ! \n\nHave a nice day. :) ")
+    print("\nYour rank monitoring was successful ! \n\nHave a nice day. :) \n")
 
 main()
