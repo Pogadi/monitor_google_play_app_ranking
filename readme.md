@@ -26,8 +26,9 @@ https://sites.google.com/a/chromium.org/chromedriver/getting-started
  2. In file ranking.py find function `def is_ranking(class_post):`
     and change package_name in variable `app_id = "com.taransit.transport"` to package_name of your app. 
  3. Change path to your downloaded WebDriver, in main function `def main():` and variable `driver = webdriver.Chrome("YOUR/PATH/OF/WEBDRIVER")`
- 4. Run a script to start crawling Google Play. `python3 ranking.py`
- 5. As a result you will get output in a console / terminal for each keyword. But you can find also a export of .csv file with an exact date and time of monitoring.
- 6. Enjoy ! :) 
+ 4. Change path to folder, where you want to see your .csv output of rank index, in main function `def main():` and variable `path_to_output = '/YOUR/PATH/TO/FILE/' 
+ 5. Run a script to start crawling Google Play. `python3 ranking.py`
+ 6. As a result you will get output in a console / terminal for each keyword. But you can find also a export of .csv file with an exact date and time of monitoring.
+ 7. Enjoy ! :) 
  
   ![Keywords rank output](https://github.com/Pogadi/monitor_google_play_app_ranking/blob/master/src/example%20of%20output.png)
