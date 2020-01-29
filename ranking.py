@@ -5,9 +5,6 @@ from datetime import datetime
 from selenium import webdriver
 
 
-
-  # Optional argument, if not specified will search path.
-
 def is_ranking(class_post):
     app_id = "com.taransit.transport"
     post_app_id = str(class_post)
@@ -104,10 +101,14 @@ def scroll_down_page(driver):
 
 
 def main():
+    start_time = datetime.now()
+
     driver = webdriver.Chrome('/Users/martin/Documents/STUDY/5_DEV/1_Python_Scrapig/chromedriver')
+    #driver = webdriver.Firefox(executable_path='/Users/martin/Documents/STUDY/5_DEV/1_Python_Scrapig/geckodriver')
 
     filename = datetime.now().strftime("%Y%m%d-%H%M%S")
-    with  open(filename + '.csv', 'w') as output:
+
+    with  open('/Users/martin/Documents/WORK/1_TARANSIT/4_ASO/1_Reports/' + filename + '.csv', 'w') as output:
 
         keywords_url = keywords_to_url()
 
@@ -129,6 +130,9 @@ def main():
 
             print("{} / {}  ~ {} ".format(rank, number, word))
 
-    print("\nYour rank monitoring was successful ! \n\nHave a nice day. :) \n")
+
+    print("\nYour rank monitoring was successful !")
+    print("Time elapsed:", datetime.now() - start_time)
+    print("\nHave a nice day. :) \n")
 
 main()
