@@ -6,6 +6,8 @@ from selenium import webdriver
 
 
 def is_ranking(class_post):
+
+    #Change your app_id for getting rank index of your app
     app_id = "com.taransit.transport"
     post_app_id = str(class_post)
     if app_id in post_app_id:
@@ -108,7 +110,10 @@ def main():
 
     filename = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-    with  open('/Users/martin/Documents/WORK/1_TARANSIT/4_ASO/1_Reports/' + filename + '.csv', 'w') as output:
+    # Path to your file with exported .csv
+    path_to_output = '/Users/martin/Documents/WORK/1_TARANSIT/4_ASO/1_Reports/'
+
+    with  open(path_to_output + filename + '.csv', 'w') as output:
 
         keywords_url = keywords_to_url()
 
